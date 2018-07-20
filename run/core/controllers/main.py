@@ -16,7 +16,9 @@ def show_main():
 		return render_template("feed.html", \
 								username=session["username"], \
 								first_name=session["first_name"], \
-								last_name=session["last_name"])
+								last_name=session["last_name"],
+								num_posts=model.get_num_posts(session["username"]), \
+								num_reposts=model.get_num_reposts(session["username"]))
 	# Signup page (out of session - user not signed in)
 	else:
 		# GET request

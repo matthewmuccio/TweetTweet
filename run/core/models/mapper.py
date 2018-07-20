@@ -129,6 +129,32 @@ def get_name(username):
 	connection.close()
 	return result
 
+# Returns the number of posts of a given username.
+def get_num_posts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT num_posts FROM users WHERE username=?", (username,))
+	try:
+		result = cursor.fetchall()[0][0]
+	except IndexError:
+		result = None
+	cursor.close()
+	connection.close()
+	return result
+
+# Returns the number of reposts of a given username.
+def get_num_reposts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT num_reposts FROM users WHERE username=?", (username,))
+	try:
+		result = cursor.fetchall()[0][0]
+	except IndexError:
+		result = None
+	cursor.close()
+	connection.close()
+	return result
+
 ### UPDATE / INSERT
 # Updates the last login time in the users database table to the current time (when the uesr logs in).
 def update_last_login(username):
