@@ -6,7 +6,8 @@ import os
 from flask import Flask, render_template
 
 from core.controllers.login import controller as login
-from core.controllers.signup import controller as signup
+from core.controllers.main import controller as main
+from core.controllers.profile import controller as profile
 
 
 def keymaker(omnibus, filename="secret_key"):

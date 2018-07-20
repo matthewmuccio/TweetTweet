@@ -6,14 +6,15 @@ from flask import abort, Blueprint, redirect, render_template, request, session,
 from core.models import model
 
 
-controller = Blueprint("signup", __name__, url_prefix="/")
+controller = Blueprint("main", __name__, url_prefix="/")
 
+# Shows the feed page (if user is in session), or the signup page (if user is not in session).
 @controller.route("/", methods=["GET", "POST"])
-def show_signup():
-	# In session (user signed in)
+def show_main():
+	# Feed page (in session - user signed in)
 	if "username" in session:
 		return redirect(url_for("dashboard.show_dashboard"))
-	# Out of session (user not signed in)
+	# Signup page (out of session - user not signed in)
 	else:
 		# GET request
 		if request.method == "GET":
