@@ -25,17 +25,18 @@ def create_account(username, password, first_name, last_name):
 		return ["Sorry, the username you entered is invalid.", "Usernames must contain between 3 and 20 characters.", "They can only contain lowercase letters, numbers, and underscores."]
 	elif not valid_password(password):
 		return ["Sorry, the password you entered is invalid.", "Passwords must contain between 8 and 50 characters."]
+	
 	username = username.lower()
 	first_name = first_name.lower().capitalize()
 	last_name = last_name.lower().capitalize()
 	password = encrypt_password(password)
-	connection = sqlite3.connect("master.db", check_same_thread=False)
-	cursor = connection.cursor()
 	num_posts = 0
 	num_reposts = 0
 	first_login = datetime.datetime.now().replace(microsecond=0)
 	last_login = first_login
 
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
 	cursor.execute(
 		"""INSERT INTO users(
 			username,
@@ -48,6 +49,9 @@ def create_account(username, password, first_name, last_name):
 			last_login
 		) VALUES(?,?,?,?,?,?,?,?);""", (username, password, first_name, last_name, num_posts, num_reposts, first_login, last_login,)
 	)
+	connection.commit()
+	cursor.close()
+	connection.close()
 	return ["Success", "User"]
 
 # Logs in to account in users database table.
