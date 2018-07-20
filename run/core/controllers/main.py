@@ -13,7 +13,10 @@ controller = Blueprint("main", __name__, url_prefix="/")
 def show_main():
 	# Feed page (in session - user signed in)
 	if "username" in session:
-		return redirect(url_for("dashboard.show_dashboard"))
+		return render_template("feed.html", \
+								username=session["username"], \
+								first_name=session["first_name"], \
+								last_name=session["last_name"])
 	# Signup page (out of session - user not signed in)
 	else:
 		# GET request
@@ -23,16 +26,23 @@ def show_main():
 		else:
 			# Accesses current form data (data transmitted in a POST request).
 			username = request.form["username"]
+			first_name = request.form["first-name"]
+			last_name = request.form["last-name"]
 			password1 = request.form["password1"]
 			password2 = request.form["password2"]
 			# If the passwords the user entered match.
 			if password1 == password2:
 				# Attempts to create an account with the entered username and password.
-				response = model.create_account(username, password1)
+				response = model.create_account(username, password1, first_name, last_name)
 				# If the user's account has been successfully created.
 				if "Success" in response:
 					session["username"] = username
-					return redirect(url_for("dashboard.show_dashboard"))
+					session["first_name"] = first_name
+					session["last_name"] = last_name
+					return render_template("feed.html", \
+											username=username, \
+											first_name=first_name, \
+											last_name=last_name)
 				# If there was an issue creating the account (username already exists, account already exists, or username was invalid).
 				else:
 					return render_template("signup.html", response=response)
@@ -40,11 +50,24 @@ def show_main():
 			else:
 				return render_template("signup.html", response=["Passwords did not match."])
 
+# Handles signing out the user and removing them from the session.
+@controller.route("/signout", methods=["GET"])
+def signout():
+	# In session (user signed in)
+	if "username" in session:
+		session.pop("username", None)
+		session.pop("first_name", None)
+		session.pop("last_name", None)
+		return redirect(url_for("main.show_main"))
+	# Out of session (user not signed in)
+	else:
+		return redirect(url_for("main.show_main"))
+
 # Handles page requests for non-existent pages (404 errors).
 @controller.route("/<path:path>", methods=["GET"])
 def show_404(path):
 	if "username" in session:
-		return redirect(url_for("dashboard.show_dashboard"))
+		return redirect(url_for("main.show_main"))
 	else:
 		abort(404)
 

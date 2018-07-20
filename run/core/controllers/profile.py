@@ -10,4 +10,9 @@ controller = Blueprint("profile", __name__, url_prefix="/profile")
 
 @controller.route("/", methods=["GET"])
 def show_profile():
-    return render_template("profile.html")
+    # In session (user signed in)
+    if "username" in session:
+        return render_template("profile.html")
+    # Out of session (user not signed in)
+    else:
+        return redirect(url_for("main.show_main"))

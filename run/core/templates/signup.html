@@ -21,7 +21,7 @@
 <body>
     <form class="form-signin" method="POST">
         <div class="text-center mb-4">
-            <img class="mb-4" src="{{ url_for('static', filename='tweettweet-icon.png') }}" alt="" width="100" height="100">
+            <img class="mb-4" src="{{ url_for('static', filename='tweettweet-icon.png') }}" alt="" width="75" height="75">
             <h1 class="h3 mb-3">TweetTweet</h1>
             <p>A simple Twitter-like web application, for posting and reposting tweets from fellow users around the world.</p>
             {% if response %}
@@ -36,6 +36,16 @@
         <div class="form-label-group">
             <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
             <label for="inputEmail">Username</label>
+        </div>
+
+        <div class="form-label-group">
+            <input name="first-name" type="text" id="inputFirstName" class="form-control" placeholder="First Name" required>
+            <label for="inputFirstName">First Name</label>
+        </div>
+
+        <div class="form-label-group">
+            <input name="last-name" type="text" id="inputLastName" class="form-control" placeholder="Last Name" required>
+            <label for="inputLastName">Last Name</label>
         </div>
 
         <div class="form-label-group">

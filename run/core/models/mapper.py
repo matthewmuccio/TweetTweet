@@ -14,7 +14,7 @@ def encrypt_password(password):
 	return hashlib.sha512(str.encode(password)).hexdigest()
 
 # Creates an account in users database table.
-def create_account(username, password):
+def create_account(username, password, first_name, last_name):
 	if account_exists(username, password):
 		return ["Sorry, an account with that username and password already exists.", "Log in with those credentials to access your account."]
 	elif username_exists(username):
@@ -24,24 +24,25 @@ def create_account(username, password):
 	elif not valid_password(password):
 		return ["Sorry, the password you entered is invalid.", "Passwords must contain between 8 and 50 characters."]
 	password = encrypt_password(password)
-	default_balance = 100000.00
-	first_login = datetime.datetime.now().replace(microsecond=0)
-	last_login = first_login
 	connection = sqlite3.connect("master.db", check_same_thread=False)
 	cursor = connection.cursor()
+	num_posts = 0
+	num_reposts = 0
+	first_login = datetime.datetime.now().replace(microsecond=0)
+	last_login = first_login
+
 	cursor.execute(
 		"""INSERT INTO users(
 			username,
 			password,
-			balance,
+			first_name,
+			last_name,
+			num_posts,
+			num_reposts,
 			first_login,
 			last_login
-			) VALUES(?,?,?,?,?);
-		""", (username, password, default_balance, first_login, last_login,)
+		) VALUES(?,?,?,?,?,?,?,?);""", (username, password, first_name, last_name, num_posts, num_reposts, first_login, last_login,)
 	)
-	connection.commit()
-	cursor.close()
-	connection.close()
 	return ["Success", "User"]
 
 # Logs in to account in users database table.
@@ -64,6 +65,19 @@ def login(username, password):
 		# Updates last_login in users database table.
 		update_last_login(username)
 		return ["Success", "User"]
+
+# Checks if an account (username and password) is the admin account.
+def is_admin(username, password):
+	return username == "admin" and account_exists(username, password)
+
+# Checks if a username is valid.
+def valid_username(username):
+	return re.search(r"\A[a-z0-9_]{3,20}\Z", username)
+ 
+# Checks if a password is valid.
+def valid_password(password):
+	regex = r"\A[A-Za-z0-9\"\^\-\]\\~`!@#$%&*()_+=|{}[:;'<>,.?/]{8,50}\Z"
+	return re.search(regex, password)
 
 ### SELECT (GET)
 
@@ -88,15 +102,25 @@ def account_exists(username, password):
 	connection.close()
 	return result
 
-# Checks if an account (username and password) is the admin account.
-def is_admin(username, password):
-	return username == "admin" and account_exists(username, password)
+# Returns the user's first and last name in a tuple, or None if username does not exist.
+def get_name(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT first_name, last_name FROM users WHERE username=?", (username,))
+	try:
+		result = cursor.fetchall()[0]
+	except IndexError:
+		result = None
+	cursor.close()
+	connection.close()
+	return result
 
-# Checks if a username is valid.
-def valid_username(username):
-	return re.search(r"\A[a-z0-9_]{3,20}\Z", username)
- 
-# Checks if a password is valid.
-def valid_password(password):
-	regex = r"\A[A-Za-z0-9\"\^\-\]\\~`!@#$%&*()_+=|{}[:;'<>,.?/]{8,50}\Z"
-	return re.search(regex, password)
+### UPDATE / INSERT
+# Updates the last login time in the users database table to the current time (when the uesr logs in).
+def update_last_login(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("UPDATE users SET last_login=? WHERE username=?", (datetime.datetime.now().replace(microsecond=0), username,))
+	connection.commit()
+	cursor.close()
+	connection.close()

@@ -12,7 +12,7 @@ controller = Blueprint("login", __name__, url_prefix="/login")
 def show_login():
 	# In session (user signed in)
 	if "username" in session:
-		return redirect(url_for("dashboard.show_dashboard"))
+		return redirect(url_for("main.show_main"))
 	# Out of session (user not signed in)
 	else:
 		# GET request
@@ -28,12 +28,14 @@ def show_login():
 			# If the user has successfully logged in to their account.
 			if "Success" in response:
 				session["username"] = username
+				session["first_name"], session["last_name"] = model.get_name(username)
 				# If it is the admin user.
 				if "Admin" in response:
-					return redirect(url_for("admin.show_dashboard"))
+					# TODO: Add admin functionality.
+					return redirect(url_for("main.show_main"))
 				# If it is any other user.
 				else:
-					return redirect(url_for("dashboard.show_dashboard"))
+					return redirect(url_for("main.show_main"))
 			# If there was an issue with logging in to the account (username or account does not exist).
 			else:
 				return render_template("login.html", response=response)
