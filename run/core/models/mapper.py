@@ -15,6 +15,8 @@ def encrypt_password(password):
 
 # Creates an account in users database table.
 def create_account(username, password, first_name, last_name):
+	if not valid_name(first_name, last_name):
+		return ["Sorry, names can only contain letters, apostrophes, or hyphens.", "They must contain between 1 and 50 characters."]
 	if account_exists(username, password):
 		return ["Sorry, an account with that username and password already exists.", "Log in with those credentials to access your account."]
 	elif username_exists(username):
@@ -23,6 +25,9 @@ def create_account(username, password, first_name, last_name):
 		return ["Sorry, the username you entered is invalid.", "Usernames must contain between 3 and 20 characters.", "They can only contain lowercase letters, numbers, and underscores."]
 	elif not valid_password(password):
 		return ["Sorry, the password you entered is invalid.", "Passwords must contain between 8 and 50 characters."]
+	username = username.lower()
+	first_name = first_name.lower().capitalize()
+	last_name = last_name.lower().capitalize()
 	password = encrypt_password(password)
 	connection = sqlite3.connect("master.db", check_same_thread=False)
 	cursor = connection.cursor()
@@ -78,6 +83,11 @@ def valid_username(username):
 def valid_password(password):
 	regex = r"\A[A-Za-z0-9\"\^\-\]\\~`!@#$%&*()_+=|{}[:;'<>,.?/]{8,50}\Z"
 	return re.search(regex, password)
+
+# Checks if a first and last name are valid.
+def valid_name(first_name, last_name):
+	regex = r"\A[A-Za-z\-']{1,50}\Z"
+	return re.search(regex, first_name) and re.search(regex, last_name)
 
 ### SELECT (GET)
 
