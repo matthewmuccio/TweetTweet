@@ -13,12 +13,56 @@ controller = Blueprint("main", __name__, url_prefix="/")
 def show_main():
 	# Feed page (in session - user signed in)
 	if "username" in session:
-		return render_template("feed.html", \
-								username=session["username"], \
-								first_name=session["first_name"], \
-								last_name=session["last_name"],
-								num_posts=model.get_num_posts(session["username"]), \
-								num_reposts=model.get_num_reposts(session["username"]))
+		# GET request
+		if request.method == "GET":
+			return render_template("feed.html", \
+									username=session["username"], \
+									first_name=session["first_name"], \
+									last_name=session["last_name"],
+									num_posts=model.get_num_posts(session["username"]), \
+									num_reposts=model.get_num_reposts(session["username"]), \
+									posts=model.get_all_posts(), \
+									title="Feed")
+		# POST request
+		else:
+			# Clicking post button.
+			if "post-button" in request.form:
+				content = request.form["content"]
+				# If the post is greater than 280 characters or has 0 characters (it is invalid).
+				if len(content) > 280 or len(content) == 0:
+					return render_template("feed.html", \
+										username=session["username"], \
+										first_name=session["first_name"], \
+										last_name=session["last_name"],
+										num_posts=model.get_num_posts(session["username"]), \
+										num_reposts=model.get_num_reposts(session["username"]), \
+										posts=model.get_all_posts(), \
+										content=content, \
+										error="e", \
+										title="Feed")
+				# If the post is fewer than 280 characters (it is valid).
+				else:
+					model.add_new_post(session["username"], content)
+					return render_template("feed.html", \
+											username=session["username"], \
+											first_name=session["first_name"], \
+											last_name=session["last_name"],
+											num_posts=model.get_num_posts(session["username"]), \
+											num_reposts=model.get_num_reposts(session["username"]), \
+											posts=model.get_all_posts(), \
+											title="Feed")
+			# Clicking repost button.
+			elif "repost-button" in request.form:
+				post_id = request.form["post-id"]
+				model.add_new_repost(session["username"], post_id)
+				return render_template("feed.html", \
+											username=session["username"], \
+											first_name=session["first_name"], \
+											last_name=session["last_name"],
+											num_posts=model.get_num_posts(session["username"]), \
+											num_reposts=model.get_num_reposts(session["username"]), \
+											posts=model.get_all_posts(), \
+											title="Feed")
 	# Signup page (out of session - user not signed in)
 	else:
 		# GET request
@@ -44,7 +88,10 @@ def show_main():
 					return render_template("feed.html", \
 											username=username, \
 											first_name=first_name, \
-											last_name=last_name)
+											last_name=last_name, \
+											num_posts=model.get_num_posts(session["username"]), \
+											num_reposts=model.get_num_reposts(session["username"]), \
+											title="Feed")
 				# If there was an issue creating the account (username already exists, account already exists, or username was invalid).
 				else:
 					return render_template("signup.html", response=response)
@@ -64,6 +111,16 @@ def signout():
 	# Out of session (user not signed in)
 	else:
 		return redirect(url_for("main.show_main"))
+
+@controller.route("/base", methods=["GET"])
+def show_base():
+	return render_template("base.html", \
+								username=session["username"], \
+								first_name=session["first_name"], \
+								last_name=session["last_name"],
+								num_posts=model.get_num_posts(session["username"]), \
+								num_reposts=model.get_num_reposts(session["username"]), \
+								title="Base")
 
 # Handles page requests for non-existent pages (404 errors).
 @controller.route("/<path:path>", methods=["GET"])

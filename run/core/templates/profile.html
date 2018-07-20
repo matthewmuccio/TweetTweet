@@ -1,13 +1,49 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>TweetTweet - {{ username }}'s Profile</title>
-</head>
+{% block content %}
+    <main role="main" class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-blue rounded box-shadow">
+            <img class="mr-3" src="{{ url_for('static', filename='default-profile-pic.png') }}" alt="" width="80" height="80">
+            <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100"><a href="{{ url_for('profile.show_profile') }}" class="no-link">{{ first_name }} {{ last_name }}</a></h6>
+                <small class="mb-0 text-white lh-100">@<a href="{{ url_for('profile.show_profile') }}" class="no-link">{{ username }}</a></small>
+            </div>
+        </div>
 
-<body>
-        <h1>{{ first_name }} {{ last_name }}'s Profile</h1>
-        <h2>{{ username }}</h2>
-</body>
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Your Posts ({{num_posts}})</h6>
+            {% if posts %}
+            {% for post, post_time in posts.items() %}
+            <div class="media text-muted pt-3">
+                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <strong class="d-block text-gray-dark">{{ first_name }} {{ last_name }} (@{{ username }}) · {{ post_time }}</strong>
+                    {{ post }}
+                </p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <small class="d-block text-right mt-3">
+                <a href="">Refresh</a>
+            </small>
+        </div>
 
-</html>
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Your Reposts ({{ num_reposts }})</h6>
+            {% if reposts %}
+            {% for post_id, post_info in reposts.items() %}
+            <div class="media text-muted pt-3">
+                <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <strong class="d-block text-gray-dark">{{ post_info[1] }} {{ post_info[2] }} (@{{ post_info[0] }}) · {{ post_info[4] }}</strong>
+                    {{ post_info[3] }}
+                </p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <small class="d-block text-right mt-3">
+                <a href="">Refresh</a>
+            </small>
+        </div>
+    </main>
+{% endblock %}

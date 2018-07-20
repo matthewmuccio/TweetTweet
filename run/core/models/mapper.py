@@ -155,7 +155,99 @@ def get_num_reposts(username):
 	connection.close()
 	return result
 
+# Returns all the posts and post times for a given username.
+def get_posts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT content, post_time FROM posts WHERE author_username=? ORDER BY post_time DESC", (username,))
+	try:
+		result = cursor.fetchall()
+		posts = {c : p for (c,p) in result}
+	except (TypeError, IndexError):
+		return None
+	cursor.close()
+	connection.close()
+	return posts
+
+# Returns all the posts and post times in the database.
+def get_all_posts():
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT id, author_username, author_first_name, author_last_name, content, post_time FROM posts ORDER BY post_time DESC")
+	try:
+		result = cursor.fetchall()
+		posts = {}
+		for r in result:
+			posts[r[0]] = [r[1], r[2], r[3], r[4], r[5]]
+	except (TypeError, IndexError):
+		return None
+	cursor.close()
+	connection.close()
+	return posts
+
+# Retrieves a post and its information by its id.
+def get_post(post_id):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT id, author_username, author_first_name, author_last_name, content, post_time FROM posts WHERE id=? ORDER BY post_time DESC", (post_id,))
+	try:
+		result = cursor.fetchall()
+		for r in result:
+			post = [r[1], r[2], r[3], r[4], r[5]]
+	except (TypeError, IndexError):
+		return None
+	cursor.close()
+	connection.close()
+	return post
+
+# Returns all the reposts for a given username.
+def get_reposts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	cursor.execute("SELECT post_id FROM reposts WHERE reposter_username=?", (username,))
+	try:
+		post_ids = cursor.fetchall()
+		post_ids_list = [i[0] for i in post_ids]
+	except (TypeError, IndexError):
+		return None
+	reposts = {}
+	for post_id in post_ids_list:
+		reposts[post_id] = get_post(post_id)
+		print(reposts[post_id])
+	cursor.close()
+	connection.close()
+	return reposts
+
 ### UPDATE / INSERT
+# Adds a new post to the posts database table.
+def add_new_post(username, content):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	first_name, last_name = get_name(username)
+	post_time = datetime.datetime.now().replace(microsecond=0)
+	update_num_posts(username)
+	cursor.execute("""INSERT INTO posts(
+						author_username,
+						author_first_name,
+						author_last_name,
+						content,
+						post_time) VALUES(?,?,?,?,?);""", (username, first_name, last_name, content, post_time,))
+	connection.commit()
+	cursor.close()
+	connection.close()
+
+# Adds a new repost to the posts database table.
+def add_new_repost(username, post_id):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	update_num_reposts(username)
+	cursor.execute("""INSERT INTO reposts(
+						post_id,
+						reposter_username) VALUES(?,?);""", (post_id, username,))
+	connection.commit()
+	cursor.close()
+	connection.close()
+
 # Updates the last login time in the users database table to the current time (when the uesr logs in).
 def update_last_login(username):
 	connection = sqlite3.connect("master.db", check_same_thread=False)
@@ -164,3 +256,26 @@ def update_last_login(username):
 	connection.commit()
 	cursor.close()
 	connection.close()
+
+# Updates the user's number of posts, as they just added a post.
+def update_num_posts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	num_posts = get_num_posts(username)
+	cursor.execute("UPDATE users SET num_posts=? WHERE username=?", (num_posts + 1, username,))
+	connection.commit()
+	cursor.close()
+	connection.close()
+
+# Updates the user's number of posts, as they just added a post.
+def update_num_reposts(username):
+	connection = sqlite3.connect("master.db", check_same_thread=False)
+	cursor = connection.cursor()
+	num_reposts = get_num_reposts(username)
+	cursor.execute("UPDATE users SET num_reposts=? WHERE username=?", (num_reposts + 1, username,))
+	connection.commit()
+	cursor.close()
+	connection.close()
+
+if __name__ == "__main__":
+	print(get_reposts("tweeter"))

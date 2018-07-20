@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <title>TweetTweet - {{ username }}'s {{ title }}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/base-styles.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <!-- Navbar. -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+        <!--<a class="navbar-brand mr-auto mr-lg-0" href="">TweetTweet</a>-->
+        <a href=""><img class="mr-3" src="{{ url_for('static', filename='tweettweet-icon.png') }}" alt="" width="40" height="40"></a>
+        <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                {% if title == "Feed" %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('main.show_main') }}">Feed
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.show_main') }}">Feed</a>
+                </li>
+                {% endif %}
+                {% if title == "Profile" %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('profile.show_profile') }}">Profile
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('profile.show_profile') }}">Profile</a>
+                </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">About</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="http://www.matthewmuccio.com/" target="_blank">Matthew Muccio</a>
+                        <a class="dropdown-item" href="https://github.com/matthewmuccio/Assessment2" target="_blank">Project</a>
+                        <a class="dropdown-item" href="https://github.com/matthewmuccio" target="_blank">GitHub</a>
+                        <a class="dropdown-item" href="https://www.linkedin.com/in/matthewmuccio/" target="_blank">LinkedIn</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.signout') }}">Sign out</a>
+                    </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="nav-scroller bg-white box-shadow">
+        <nav class="nav nav-underline">
+            <a class="nav-link active" href="{{ url_for('profile.show_profile') }}">{{ first_name }} {{ last_name }}</a>
+            <a class="nav-link" href="{{ url_for('profile.show_profile') }}">
+                Posts
+                <span class="badge badge-pill bg-light align-text-bottom">{{ num_posts }}</span>
+            </a>
+            <a class="nav-link" href="{{ url_for('profile.show_profile') }}">
+                Reposts
+                <span class="badge badge-pill bg-light align-text-bottom">{{ num_reposts }}</span>
+            </a>
+        </nav>
+    </div>
+    <!-- End navbar. -->
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer. -->
+    <footer class="py-5 bg-dark" style="position: absolute; bottom: 0; left: 0; right: 0;">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Matthew Muccio 2018</p>
+        </div>
+    </footer>
+    <!-- End footer. -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script>
+        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')
+    </script>
+    <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.1/examples/offcanvas/offcanvas.js"></script>
+</body>
+
+</html>
