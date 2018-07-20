@@ -9,7 +9,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <title>Web Trader - Sign Up</title>
+    <title>TweetTweet - Sign Up</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,9 +21,9 @@
 <body>
     <form class="form-signin" method="POST">
         <div class="text-center mb-4">
-            <img class="mb-4" src="{{ url_for('static', filename='webtrader-icon.png') }}" alt="" width="72" height="72">
-            <h1 class="h3 mb-3">Web Trader</h1>
-            <p>A trading web application for buying and selling stock, among other trading operations, with real market data.</p>
+            <img class="mb-4" src="{{ url_for('static', filename='tweettweet-icon.png') }}" alt="" width="100" height="100">
+            <h1 class="h3 mb-3">TweetTweet</h1>
+            <p>A simple Twitter-like web application, for posting and reposting tweets from fellow users around the world.</p>
             {% if response %}
             <div style="line-height: 6px;">
             {% for line in response %}
@@ -54,14 +54,14 @@
             </label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+        <button class="btn btn-lg btn-success btn-block" type="submit">Sign Up</button>
 
         <div class="login-button">
             <div class="text-center">
                     <label>Already have an account?</label>
             </div>
             <a href="{{ url_for('login.show_login') }}">
-                <button class="btn btn-lg btn-danger btn-block" type="button">Log In</button>
+                <button class="btn btn-lg btn-info btn-block" type="button">Log In</button>
             </a>
         </div>
 

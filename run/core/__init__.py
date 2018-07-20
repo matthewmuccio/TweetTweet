@@ -33,7 +33,8 @@ omnibus = Flask(__name__)
 
 # Registers blueprints of the controllers for the app.
 omnibus.register_blueprint(login)
-omnibus.register_blueprint(signup)
+omnibus.register_blueprint(main)
+omnibus.register_blueprint(profile)
 
 # Enables debug mode.
 omnibus.config["DEBUG"] = True
