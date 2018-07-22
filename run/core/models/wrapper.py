@@ -4,7 +4,3 @@
 #import json
 
 #import requests
-
-
-def get_data(x):
-	pass

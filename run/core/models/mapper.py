@@ -213,7 +213,6 @@ def get_reposts(username):
 	reposts = {}
 	for post_id in post_ids_list:
 		reposts[post_id] = get_post(post_id)
-		print(reposts[post_id])
 	cursor.close()
 	connection.close()
 	return reposts
@@ -276,6 +275,3 @@ def update_num_reposts(username):
 	connection.commit()
 	cursor.close()
 	connection.close()
-
-if __name__ == "__main__":
-	print(get_reposts("tweeter"))
