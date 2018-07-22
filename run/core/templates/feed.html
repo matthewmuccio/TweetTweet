@@ -2,7 +2,7 @@
 
 {% block content %}
     <main role="main" class="container">
-        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-blue rounded box-shadow">
             <img class="mr-3" src="{{ url_for('static', filename='default-profile-pic.png') }}" alt="" width="80" height="80">
             <div class="lh-100">
                 <h6 class="mb-0 text-white lh-100"><a href="{{ url_for('profile.show_profile') }}" class="no-link">{{ first_name }} {{ last_name }}</a></h6>
