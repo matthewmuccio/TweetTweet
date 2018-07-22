@@ -1,13 +1,8 @@
-Phase 2 Assessment - Twitter Clone (TweetTweet)
-===============================================
-
-* For your assessment today we'll be building our own mini version of Twitter.
-* I've posted the user stories below 
-* This may sound like a lot or it may sound confusing. Take your time to plan your application. We care more about the quality of your code than how large your code base is. 
-* Good luck and feel free to ask questions for clarity.
+TweetTweet
+==========
+* A web application that implements a simple Twitter clone, built using the Flask web microframework, Bootstrap front-end framework, Jinja template engine, and SQLite RDBMS.
 
 #### User Stories
-
 * Users should be able to register for an account
 * Users should be able to log in 
 	* Don't worry about sessions. Assume the user is not closing the window and opening it
@@ -17,8 +12,7 @@ Phase 2 Assessment - Twitter Clone (TweetTweet)
 * Users can click a repost button on a post that is not theirs. 
 
 #### Planning
-
-* PLAN OUT YOUR APPLICATION!!!
+* PLAN OUT YOUR APPLICATION!
 * Planning lowers the time it takes to develop an app. 
 * What will your endpoints be?
 	* What endpoint will render an HTML file?
@@ -28,9 +22,7 @@ Phase 2 Assessment - Twitter Clone (TweetTweet)
 	* THINK about this idea of reposting. If a user clicks a repost how will that look in the database? 
 * What will your templates look like?
 
-
 #### Luxury Goals
-
 * Add User Sessions
 * Add Password Hashing for User Login
 * Make things look pretty - Honestly your app could look like crap, I just want it to work. If it works then feel free to make it look like better crap.
@@ -39,6 +31,5 @@ Phase 2 Assessment - Twitter Clone (TweetTweet)
 * Add a search bar that can search for those keywords
 
 #### Deployment
-Deploy the web application on a VPS from DigitalOcean running Ubuntu 16.04, with NGINX and firewalld.
-
-Check with `systemctl status firewalld` and `firewall-cmd —list-all`.
+* Deploy the web application on a VPS from DigitalOcean running Ubuntu 16.04, with NGINX and firewalld.
+* Check with `systemctl status firewalld` and `firewall-cmd —list-all`.
