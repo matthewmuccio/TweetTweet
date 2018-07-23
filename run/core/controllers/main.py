@@ -91,6 +91,7 @@ def show_main():
 											last_name=last_name, \
 											num_posts=model.get_num_posts(session["username"]), \
 											num_reposts=model.get_num_reposts(session["username"]), \
+											posts=model.get_all_posts(), \
 											title="Feed")
 				# If there was an issue creating the account (username already exists, account already exists, or username was invalid).
 				else:
@@ -120,6 +121,7 @@ def show_base():
 								last_name=session["last_name"],
 								num_posts=model.get_num_posts(session["username"]), \
 								num_reposts=model.get_num_reposts(session["username"]), \
+								posts=model.get_all_posts(), \
 								title="Base")
 
 # Handles page requests for non-existent pages (404 errors).
