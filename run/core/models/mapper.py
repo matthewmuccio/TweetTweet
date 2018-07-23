@@ -160,10 +160,13 @@ def get_num_reposts(username):
 def get_posts(username):
 	connection = sqlite3.connect("master.db", check_same_thread=False)
 	cursor = connection.cursor()
-	cursor.execute("SELECT content, post_time FROM posts WHERE author_username=? ORDER BY post_time DESC", (username,))
+	cursor.execute("SELECT id, content, post_time FROM posts WHERE author_username=? ORDER BY post_time DESC", (username,))
 	try:
 		result = cursor.fetchall()
-		posts = {c : p for (c,p) in result}
+		print(result)
+		posts = {}
+		for r in result:
+			posts[r[0]] = [r[1], r[2]]
 		all_posts = collections.OrderedDict(sorted(posts.items(), reverse=True))
 	except (TypeError, IndexError):
 		return None
@@ -278,6 +281,3 @@ def update_num_reposts(username):
 	connection.commit()
 	cursor.close()
 	connection.close()
-
-if __name__ == "__main__":
-	print(get_posts("matthewmuccio"))

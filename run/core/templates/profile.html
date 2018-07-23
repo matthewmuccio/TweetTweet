@@ -13,12 +13,12 @@
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <h6 class="border-bottom border-gray pb-2 mb-0">Your Posts ({{num_posts}})</h6>
             {% if posts %}
-            {% for post, post_time in posts.items() %}
+            {% for post_id, post_info in posts.items() %}
             <div class="media text-muted pt-3">
                 <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <strong class="d-block text-gray-dark">{{ first_name }} {{ last_name }} (@{{ username }}) · {{ post_time }}</strong>
-                    {{ post }}
+                <strong class="d-block text-gray-dark">{{ first_name }} {{ last_name }} (@{{ username }}) · {{ post_info[1] }}</strong>
+                    {{ post_info[0] }}
                 </p>
             </div>
             {% endfor %}
