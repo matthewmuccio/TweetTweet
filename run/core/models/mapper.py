@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+import collections
 import datetime
 import hashlib
 import re
@@ -163,11 +164,12 @@ def get_posts(username):
 	try:
 		result = cursor.fetchall()
 		posts = {c : p for (c,p) in result}
+		all_posts = collections.OrderedDict(sorted(posts.items(), reverse=True))
 	except (TypeError, IndexError):
 		return None
 	cursor.close()
 	connection.close()
-	return posts
+	return all_posts
 
 # Returns all the posts and post times in the database.
 def get_all_posts():
@@ -179,11 +181,12 @@ def get_all_posts():
 		posts = {}
 		for r in result:
 			posts[r[0]] = [r[1], r[2], r[3], r[4], r[5]]
+		all_posts = collections.OrderedDict(sorted(posts.items(), reverse=True))
 	except (TypeError, IndexError):
 		return None
 	cursor.close()
 	connection.close()
-	return posts
+	return all_posts
 
 # Retrieves a post and its information by its id.
 def get_post(post_id):
@@ -275,3 +278,6 @@ def update_num_reposts(username):
 	connection.commit()
 	cursor.close()
 	connection.close()
+
+if __name__ == "__main__":
+	print(get_posts("matthewmuccio"))
