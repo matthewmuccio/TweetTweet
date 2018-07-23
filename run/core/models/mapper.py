@@ -214,14 +214,15 @@ def get_reposts(username):
 	try:
 		post_ids = cursor.fetchall()
 		post_ids_list = [i[0] for i in post_ids]
+		reposts = {}
+		for post_id in post_ids_list:
+			reposts[post_id] = get_post(post_id)
+		all_reposts = collections.OrderedDict(sorted(reposts.items(), reverse=True))
 	except (TypeError, IndexError):
 		return None
-	reposts = {}
-	for post_id in post_ids_list:
-		reposts[post_id] = get_post(post_id)
 	cursor.close()
 	connection.close()
-	return reposts
+	return all_reposts
 
 ### UPDATE / INSERT
 # Adds a new post to the posts database table.
