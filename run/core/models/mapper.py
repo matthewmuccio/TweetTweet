@@ -163,7 +163,6 @@ def get_posts(username):
 	cursor.execute("SELECT id, content, post_time FROM posts WHERE author_username=? ORDER BY post_time DESC", (username,))
 	try:
 		result = cursor.fetchall()
-		print(result)
 		posts = {}
 		for r in result:
 			posts[r[0]] = [r[1], r[2]]
