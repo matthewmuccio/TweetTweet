@@ -2,6 +2,16 @@ TweetTweet
 ==========
 * A web application that implements a simple Twitter clone, built using the Flask web microframework, Bootstrap front-end framework, Jinja template engine, and SQLite RDBMS.
 
+#### Screenshots
+Feed Page (Home)
+![tweettweet-feed.png](https://github.com/matthewmuccio/TweetTweet/raw/master/screenshots/tweettweet-feed.png)
+
+Profile Page
+![tweettweet-profile.png](https://github.com/matthewmuccio/TweetTweet/raw/master/screenshots/tweettweet-profile.png)
+
+Login Page
+![tweettweet-login.png](https://github.com/matthewmuccio/TweetTweet/raw/master/screenshots/tweettweet-login.png)
+
 #### User Stories
 * Users should be able to register for an account.
 * Users should be able to log in.
