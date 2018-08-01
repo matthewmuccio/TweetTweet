@@ -22,6 +22,7 @@ def show_main():
 									num_posts=model.get_num_posts(session["username"]), \
 									num_reposts=model.get_num_reposts(session["username"]), \
 									posts=model.get_all_posts(), \
+									reposts=model.get_reposts(session["username"]), \
 									title="Feed")
 		# POST request
 		else:
@@ -37,6 +38,7 @@ def show_main():
 										num_posts=model.get_num_posts(session["username"]), \
 										num_reposts=model.get_num_reposts(session["username"]), \
 										posts=model.get_all_posts(), \
+										reposts=model.get_reposts(session["username"]), \
 										content=content, \
 										error="e", \
 										title="Feed")
@@ -50,6 +52,7 @@ def show_main():
 											num_posts=model.get_num_posts(session["username"]), \
 											num_reposts=model.get_num_reposts(session["username"]), \
 											posts=model.get_all_posts(), \
+											reposts=model.get_reposts(session["username"]), \
 											title="Feed")
 			# Clicking repost button.
 			elif "repost-button" in request.form:
@@ -62,6 +65,7 @@ def show_main():
 											num_posts=model.get_num_posts(session["username"]), \
 											num_reposts=model.get_num_reposts(session["username"]), \
 											posts=model.get_all_posts(), \
+											reposts=model.get_reposts(session["username"]), \
 											title="Feed")
 	# Signup page (out of session - user not signed in)
 	else:

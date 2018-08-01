@@ -30,7 +30,7 @@
                     <strong class="d-block text-gray-dark">{{ post_info[1] }} {{ post_info[2] }} (@{{ post_info[0] }}) · {{ post_info[4] }}</strong>
                         {{ post_info[3] }}
                     </p>
-                    {% if post_info[0] != username %}
+                    {% if post_info[0] != username and post_id not in reposts %}
                     <form method="POST">
                         <input name="post-id" type="hidden" value="{{ post_id }}">
                         <button name="repost-button" value="Repost" class="btn btn-info my-2 my-sm-0" style="margin-left: 20px;" type="submit">Repost</button>
